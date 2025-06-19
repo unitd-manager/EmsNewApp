@@ -83,12 +83,12 @@ const ProductList = () => {
 
   const contactId = user ? user.contact_id : null;
 
-console.log('cart',cart)
+
   useEffect(() => {
     getUser();
   }, [contactId]);
 
-  console.log('contactId', contactId);
+ 
 
   useEffect(() => {
     api
@@ -134,13 +134,13 @@ console.log('cart',cart)
       };
 
     const addToCart = (product, qty) => {
-      console.log('contactId1', contactId);
+     
       if (contactId !== null) {
         // Proceed with adding to cart
-        console.log('qty', product);
+      
         const productId = product.product_id;
         const itemprice = product.price;
-        console.log('productId', productId);
+    
     
         api
           .post('/orders/getBasket', { contact_id: contactId })
@@ -156,7 +156,7 @@ console.log('cart',cart)
           contact_id: contactId,
           unit_price: itemprice,
         };
-        console.log('registerData', registerData);
+      
         api
           .post('/orders/insertbasketAddCart', registerData)
           .then(response => {
@@ -188,7 +188,7 @@ console.log('cart',cart)
     };
     
 const removeItem = (item) => {
-  console.log('item',item.basket_id)
+ 
   api.post('/orders/deleteBasket', {
     basket_id: item.basket_id,
   });
@@ -321,37 +321,42 @@ const filteredGallery = applyFilters();
   keyExtractor={(item) => item.product_id} // Assuming product_id is unique
   renderItem={({ item }) => (
     <View style={styles.productContainer}>
-    <TouchableOpacity onPress={() => {
-      setSelectedProduct(item);
-      console.log('item',item)
-      navigation.navigate(StackNav.ProductAddCart,{item:item});
-    }}>
+      {/* Product Image - NOT clickable */}
       <View style={styles.productImageContainer}>
-      { item.image !== null ?(
-          <Image source={{ uri:`http://43.228.126.245/emsappAPI/adminstorage/uploads/${item.file_name}`}} style={styles.productImage} />
-        ):(
-          <Image source={require('../../../assets/images/2.png')} style={styles.productImage} />
+        {item.image !== null ? (
+          <Image
+            source={{ uri: `http://43.228.126.245/EMS-API2/storage/uploads/${item.file_name}` }}
+            style={styles.productImage}
+          />
+        ) : (
+          <Image
+            source={require('../../../assets/images/2.png')}
+            style={styles.productImage}
+          />
         )}
-      {/* <Image source={{ uri:`http://43.228.126.245/emsappApi/storage/uploads/${item.image}`}} style={styles.productImage} /> */}
       </View>
-      </TouchableOpacity>
-
+  
+      {/* Product Details - Title is clickable */}
       <View style={styles.productDetails}>
-      <TouchableOpacity onPress={() => {
-      setSelectedProduct(item);
-      console.log('item',item)
-      navigation.navigate(StackNav.ProductAddCart,{item:item});
-    }}>
-        <Text style={styles.productName}>{item.title}</Text>
+        <TouchableOpacity
+          onPress={() => {
+            setSelectedProduct(item);
+            navigation.navigate(StackNav.ProductAddCart, { item });
+          }}
+        >
+          <Text  style={styles.productName}>{item.title}</Text>
         </TouchableOpacity>
-        <View  style={styles.productDetails1}>
-        <Text style={styles.authorName1}> Author :</Text>
-        <Text style={styles.authorName}>   {item.author_name}</Text>
+  
+        <View  numberOfLines={2} ellipsizeMode="tail"style={styles.productDetails1}>
+          <Text style={styles.authorName1}>Author:</Text>
+          <Text style={styles.authorName}>{item.author_name}</Text>
         </View>
-        <Text style={styles.productPrice}>Rs :{item.price.toFixed(2)}</Text>
+  
+        <Text style={styles.productPrice}>Rs : {item.price.toFixed(2)}</Text>
       </View>
     </View>
   )}
+  
 />
     </View>
     </>
@@ -433,7 +438,7 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     color: 'green',
     marginTop:20,
-    marginLeft:115
+    marginLeft:100
   },
   addToCartButton: {
     height:40,

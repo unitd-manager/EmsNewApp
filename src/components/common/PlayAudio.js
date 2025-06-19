@@ -25,7 +25,7 @@ const PlayAudio = () => {
     api
       .get('/content/getAudioGallery', { params: { page: currentPage, pageSize: PAGE_SIZE } })
       .then(res => {
-        const serverPath = 'http://43.228.126.245/EMS-API/storage/uploads/';
+        const serverPath = 'http://43.228.126.245/EMS-API2/storage/uploads/';
         const audioData = res.data.data.map(item => ({ ...item, url: serverPath + item.file_name }));
         setListData(audioData);
       })

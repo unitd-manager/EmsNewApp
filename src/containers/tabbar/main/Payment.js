@@ -284,7 +284,7 @@ const PhotoGallery = () => {
       })
       .then(response => {
         if (response.status === 200) {
-          Alert.alert('Orders Sent successfully on your mail.');
+          Alert.alert('Payment successfully,check your email for acknowledgement.');
           navigation.navigate(StackNav.HomeTab);
         } else {
           console.error('Error');

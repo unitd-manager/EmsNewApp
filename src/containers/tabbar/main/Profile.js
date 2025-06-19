@@ -306,6 +306,7 @@ const PhotoGallery = () => {
       address_state: name?.shipping_address_state,
       address_country_code: name?.shipping_address_country_code,
       address_po_code: name?.shipping_address_po_code,
+      mobile: name?.shipping_phone,
       date_of_birth: dateOfBirth,
       father_name: name?.father_name,
       date_of_baiyath: dateOfBaiyath,

@@ -9,7 +9,7 @@ import api from '../../../api/api';
 
 const ProductAddCart = ({ route }) => {
 
-  console.log('route',route)
+
 
     const price = route.params.item.price;
     const title = route.params.item.title;
@@ -18,12 +18,8 @@ const ProductAddCart = ({ route }) => {
     const particulars = route.params.item.description_short;
     const Language = route.params.item.product_language;
 
-    console.log('productId',productIds)
-    console.log('price',price)
-    console.log('title',title)
-    console.log('image',image)
     const author = route.params.item.author_name;
-    console.log('author',author)
+
   
 
 
@@ -59,10 +55,10 @@ const ProductAddCart = ({ route }) => {
     return (price * quantity).toFixed(2);
   };
 
-  console.log('calculateTotal',calculateTotal())
+ 
   const addToCart = () => {
     if (contactId !== null) {
-      console.log('productId1',productIds)
+    
       const productId = productIds;
       const itemprice = price;
 
@@ -118,11 +114,11 @@ const ProductAddCart = ({ route }) => {
       </TouchableOpacity> */}
       <View style={styles.productImageContainer}>
       { image !== null ?(
-          <Image source={{ uri:`http://43.228.126.245/emsappAPI/adminstorage/uploads/${image}`}} style={styles.productImage} />
+          <Image source={{ uri:`http://43.228.126.245/EMS-API2/storage/uploads/${image}`}} style={styles.productImage} />
         ):(
           <Image source={require('../../../assets/images/2.png')} style={styles.productImage} />
         )}
-      {/* <Image source={{ uri:`http://43.228.126.245/EMS-API/storage/uploads/${image}`}} style={styles.productImage} /> */}
+      {/* <Image source={{ uri:`http://43.228.126.245/EMS-API2/storage/uploads/${image}`}} style={styles.productImage} /> */}
       </View>
       <View style={styles.productDetails}>
         <Text style={styles.productName}>{title}</Text>
@@ -265,18 +261,18 @@ const styles = StyleSheet.create({
     marginBottom: 8,
   },
   total: {
-    fontSize: 24,
+    fontSize: 20,
     fontWeight: 'bold',
     color:'green',
     marginBottom: 8,
-    marginRight:35
+    marginRight:41
   },
   total1: {
     color:'black',
-    fontSize: 24,
+    fontSize: 20,
     fontWeight: 'bold',
     marginBottom: 8,
-    marginRight:-50
+    marginRight:0
   },
   productParticularsHead: {
     fontSize: 18,

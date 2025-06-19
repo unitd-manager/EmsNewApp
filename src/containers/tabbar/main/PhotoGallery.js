@@ -246,7 +246,7 @@ const PhotoGallery = () => {
             filteredGallery.map((img, i) => (
                 <TouchableOpacity key={i} onPress={() => openModal(img.file_name)}>
                     <Image
-                        source={{ uri: `http://43.228.126.245/EMS-API/storage/uploads/${img.file_name}` }}
+                        source={{ uri: `http://43.228.126.245/EMS-API2/storage/uploads/${img.file_name}` }}
                         style={{
                             height: deviceHeight / 7,
                             width: deviceWidth / 3 - 6,
@@ -261,7 +261,7 @@ const PhotoGallery = () => {
             filteredGallery.map((img, i) => (
                 <TouchableOpacity key={i} onPress={() => openModal(img.file_name)}>
                     <Image
-                        source={{ uri: `http://43.228.126.245/EMS-API/storage/uploads/${img.file_name}` }}
+                        source={{ uri: `http://43.228.126.245/EMS-API2/storage/uploads/${img.file_name}` }}
                         style={{
                             height: deviceHeight / 7,
                             width: deviceWidth / 3 - 6,

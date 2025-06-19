@@ -65,7 +65,7 @@ export default function SmallCardComponent({item, user, index,getMenus}) {
 
             <Image
               source={{
-                uri: `http://43.228.126.245/EMS-API/storage/uploads/${item?.file_name}`,
+                uri: `http://43.228.126.245/EMS-API2/storage/uploads/${item?.file_name}`,
               }}
               style={localStyles.imageStyle}>
             </Image>
@@ -101,7 +101,7 @@ export default function SmallCardComponent({item, user, index,getMenus}) {
 
             <Image
               source={{
-                uri: `http://43.228.126.245/EMS-API/storage/uploads/${item?.file_name}`,
+                uri: `http://43.228.126.245/EMS-API2/storage/uploads/${item?.file_name}`,
               }}
               style={localStyles.imageStyle}>
             </Image>

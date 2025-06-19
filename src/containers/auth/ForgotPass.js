@@ -77,26 +77,35 @@ const ForgotPass = () => {
     };
 
     const onPressSignWithPassword = async () => {
-        api.post('/contact/forgotPass', {
+        try {
+          const res = await api.post('/contact/getForgotPass', {
             email: email,
-        }).then(async (res) => {
+          });
+      
+          if (res.status === 200 && res.data?.data) {
             SendEmail(res.data.data);
-        }).catch(() => {
-            Alert.alert('Please verify the email address and try again.')
-        })
-    };
+          } else {
+            setEmailError('Please verify the email address and try again.');
+          }
+        } catch (error) {
+          if (error.response?.status === 404) {
+            setEmailError('Email address not found.');
+          } else {
+            Alert.alert('Something went wrong. Please try again.');
+          }
+        }
+      };
+      
 
 
     const SendEmail = (emailData) => {
 
-        const to = emailData[0].email;
-        const subject = "Password";
-        const password = emailData[0].pass_word;
+        const to = emailData?.email;
+        const password = emailData?.pass_word;
 
         api
             .post('/commonApi/sendUseremailForgetPassword', {
                 to,
-                subject,
                 password,
             })
             .then(response => {

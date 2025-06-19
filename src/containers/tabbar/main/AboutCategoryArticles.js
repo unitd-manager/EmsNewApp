@@ -10,9 +10,13 @@ export default function AboutCategoryDetail({ detailview, onDismiss, singleDetai
   // hide space and set image in about description 
   const renderNode = (node, index, siblings, parent, defaultRenderer) => {
     if (node.name === 'img') {
-      const width = node.attribs.width || 300;
-      const height = node.attribs.height || 300;
-      const { src } = node.attribs;
+      let { src, width, height } = node.attribs;
+      width = Number(width) || 300;
+      height = Number(height) || 300;
+
+      if (src.startsWith('https://emsmedia.net')) {
+        src = src.replace('https://emsmedia.net', 'http://43.228.126.245/EMS-API2');
+      }
 
       return (
         <View key={index} style={{ flexDirection: 'row', justifyContent: 'center' }}>

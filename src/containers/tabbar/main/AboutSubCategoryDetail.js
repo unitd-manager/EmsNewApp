@@ -9,11 +9,15 @@ export default function AboutCategoryDetail({ detailviewSub, onDismissSub, selec
   // hide space and set image in about description 
   const renderNode = (node, index, siblings, parent, defaultRenderer) => {
     if (node.name === 'img') {
-      const width = node.attribs.width || 300;
-      const height = node.attribs.height || 300;
+      let { src, width, height } = node.attribs;
+      width = Number(width) || 300;
+      height = Number(height) || 300;
 
-      const { src } = node.attribs;
+      if (src.startsWith('https://emsmedia.net')) {
+        src = src.replace('https://emsmedia.net', 'http://43.228.126.245/EMS-API2');
+      }
 
+   
       return (
         <TouchableOpacity onPress={() => Linking.openURL(selectedItemSub[0].video_link)} key={index}>
         <Image

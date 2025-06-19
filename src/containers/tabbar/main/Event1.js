@@ -87,7 +87,7 @@ const ListFlat = () => {
                     <Image
                       style={styles.tinyLogo}
                       source={{
-                        uri: `http://43.228.126.245/EMS-API/storage/uploads/${item.file_name}`,
+                        uri: `http://43.228.126.245/EMS-API2/storage/uploads/${item.file_name}`,
                       }}
                     />
                     <View>

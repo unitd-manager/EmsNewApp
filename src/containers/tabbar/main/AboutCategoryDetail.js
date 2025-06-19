@@ -9,30 +9,46 @@ export default function AboutCategoryDetail({ detailview, onDismiss, singleDetai
   // hide space and set image in about description 
   const renderNode = (node, index, siblings, parent, defaultRenderer) => {
     if (node.name === 'img') {
-      const width = node.attribs.width || 300;
-      const height = node.attribs.height || 300;
-
-      const { src } = node.attribs;
-
+      let { src, width, height } = node.attribs;
+  
+      // Default sizes
+      width = Number(width) || 300;
+      height = Number(height) || 300;
+  
+      // Replace domain in image src
+      if (src.startsWith('https://emsmedia.net')) {
+        src = src.replace('https://emsmedia.net', 'http://43.228.126.245/EMS-API2');
+      }
+  
       return (
         <View key={index} style={{ flexDirection: 'row', justifyContent: 'center' }}>
           <Image
             source={{ uri: src }}
-            style={{ width: Number(width), height: Number(height), resizeMode: 'contain' }}
+            style={{ width, height, resizeMode: 'contain' }}
           />
         </View>
       );
     }
-
-    if (node.name === 'p' && node.children && node.children.length > 0 && node.children[0].type === 'text' && node.children[0].data === '\u00a0') {
+  
+    if (
+      node.name === 'p' &&
+      node.children &&
+      node.children.length > 0 &&
+      node.children[0].type === 'text' &&
+      node.children[0].data === '\u00a0'
+    ) {
       return null;
     }
-
+  
     if (node.name === 'p') {
-      // Remove margin and padding for paragraphs
-      return <Text key={index} style={{ margin: 0, padding: 0 ,color:'black'}}>{defaultRenderer(node.children, parent)}</Text>;
+      return (
+        <Text key={index} style={{ margin: 0, padding: 0, color: 'black' }}>
+          {defaultRenderer(node.children, parent)}
+        </Text>
+      );
     }
   };
+  
 
   return (
     <Modal isVisible={detailview} onBackdropPress={onDismiss}

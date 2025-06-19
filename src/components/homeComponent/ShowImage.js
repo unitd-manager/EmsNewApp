@@ -14,7 +14,7 @@ const ShowImage = ({ visible, imageUrl, onClose }) => {
                     <FA size={25} color="#fff" name="times" />
                 </TouchableOpacity>
                 <Image
-                    source={{ uri: `http://43.228.126.245/EMS-API/storage/uploads/${imageUrl}`}}
+                    source={{ uri: `http://43.228.126.245/EMS-API2/storage/uploads/${imageUrl}`}}
                     style={{
                         height: deviceHeight / 1.5,
                         width: deviceWidth,

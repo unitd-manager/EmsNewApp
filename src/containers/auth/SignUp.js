@@ -72,6 +72,13 @@ const SignUp = () => {
         }
     }, [email, password, emailError, passwordError]);
 
+    const isValidPassword = (password) => {
+        const passwordRegex =
+          /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[^A-Za-z\d]).{8,}$/;
+        return passwordRegex.test(password);
+      };
+      
+
     // onChanged
     const onChangedName = val1 => {
         // const { msg } = validateEmail(val.trim());
@@ -99,42 +106,52 @@ const SignUp = () => {
         // setPasswordError(msg);
     };
 
-
     const Insert = () => {
-        if (!name || !email || !password || !phone) {
-            Alert.alert('Please fill in all fields');
-            return;
+        if (!name || !email || !password || !phone || !conPassword) {
+          Alert.alert('Please fill in all fields');
+          return;
         }
-
+      
+        if (!isValidPassword(password)) {
+          Alert.alert(
+            'Weak Password',
+            'Password must contain at least 8 characters, including one uppercase letter, one lowercase letter, one special character, and one number.'
+          );
+          return;
+        }
+      
+        if (password !== conPassword) {
+          Alert.alert('Passwords do not match');
+          return;
+        }
+      
         const registerData = {
-            first_name: name,
-            email: email,
-            password: password,
-            mobile: phone,
+          first_name: name,
+          email: email,
+          password: password,
+          mobile: phone,
         };
-
+      
         api
-            .post('/api/register', registerData)
-            .then(response => {
-                if (response.status === 200) {
-                    // setTimeout(() => {
-                    //     SendEmail();
-                    // }, 500);
-                    Alert.alert('You have successfully registered');
-                    setTimeout(() => {
-                        navigation.navigate(StackNav.Login)
-                    }, 500);
-                } else {
-                    console.error('Error');
-                }
-            })
-            .catch(error => {
-                console.error('Error:', error);
+          .post('/api/register', registerData)
+          .then(response => {
+            if (response.status === 200) {
+              setTimeout(() => {
+                SendEmail();
+              }, 500);
+              Alert.alert('You have successfully registered');
+              setTimeout(() => {
+                navigation.navigate(StackNav.Login)
+              }, 500);
+            } else {
+              console.error('Error');
             }
-
-            );
-
-    };
+          })
+          .catch(error => {
+            setEmailError('Email is already registered');
+          });
+      };
+      
 
     const SendEmail = () => {
         const to = email;

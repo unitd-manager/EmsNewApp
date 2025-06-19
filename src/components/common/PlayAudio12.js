@@ -32,7 +32,7 @@ const AudioPlayer = () => {
         },
       })
       .then((res) => {
-        const serverPath = 'http://43.228.126.245/EMS-API/storage/uploads/';
+        const serverPath = 'http://43.228.126.245/EMS-API2/storage/uploads/';
         const audioData = res.data.data.map((item, index) => ({
           id: index.toString(), // Generate unique ID for each track
           title: item.title,

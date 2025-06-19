@@ -162,7 +162,7 @@ const marqueeValue =marquee && marquee[0]?.value
               <TouchableOpacity>
              <Image
                style={{ width:'99%', height: 120,marginTop:25,borderRadius:8,marginLeft:2 }}
-              source={{ uri: `http://43.228.126.245/emsappAPI/adminstorage/uploads/${item.file_name}` }}
+              source={{ uri: `http://43.228.126.245/EMS-API2/storage/uploads/${item.file_name}` }}
                />
                </TouchableOpacity>
               )}

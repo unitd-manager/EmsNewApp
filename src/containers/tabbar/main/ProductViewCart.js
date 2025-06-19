@@ -49,7 +49,7 @@ useEffect(() => {
           api.post('/contact/getContactsById', { contact_id:user?.contact_id || null })
           .then((res) => {
               const contactCri = res.data.data
-            console.log('res',contactCri[0].first_name)
+            
 
           setName({
               shipping_first_name: contactCri[0]?.first_name || '',
@@ -82,7 +82,6 @@ useEffect(() => {
   });
   const [showCart, setShowCart] = useState(true);
   const navigation = useNavigation();
-  console.log('cart',cart)
   const getUserCart = async () => {
     try {
       const userData = await AsyncStorage.getItem('USER');
@@ -164,7 +163,18 @@ useEffect(() => {
       return;
     }
   
-    api.post('/orders/insertorders', { ...name, contact_id: userContactId })
+    api.post('/orders/insertorders', { ...name,
+       cust_first_name: name.shipping_first_name,
+       cust_email: name.shipping_email,
+      cust_address1:name.shipping_address1,
+      cust_address_city: name.shipping_address_city,
+      cust_address_state:name.shipping_address_state,
+      cust_address_country: name.shipping_address_country_code,
+      cust_address_po_code: name.shipping_address_po_code,
+      cust_phone:name.shipping_phone,
+     contact_id: userContactId 
+     ,payment_method:'online',
+      amount:calculateTotal(),})
       .then(response => {
         if (response.status === 200) {
           const orderId = response.data.data.insertId;
@@ -173,7 +183,10 @@ useEffect(() => {
               qty: item.qty,
               unit_price: item.price,
               contact_id: userContactId,
-              order_id:orderId
+              order_id:orderId,
+              cost_price: item.qty * item.price,
+                item_title: item.title,
+                product_id: item.product_id,
             });
           }))
             .then(responses => {
@@ -295,7 +308,7 @@ useEffect(() => {
   const onPaymentPress = async () => {
 
     const amountInPaise = totalAmount * 100;
-    console.log('amountInPaise',amountInPaise)
+   
     const options = {
       description: 'Purchase Description',
       image: 'https://your-company.com/your_image.png',
@@ -337,11 +350,11 @@ useEffect(() => {
               <View key={index} style={styles.cartItemContainer}>
                   <View style={styles.productImageContainer}>
                   { item.file_name !== null ?(
-          <Image source={{ uri:`http://43.228.126.245/emsappAPI/adminstorage/uploads/${item.file_name}`}} style={styles.productImage} />
+          <Image source={{ uri:`http://43.228.126.245/EMS-API2/storage/uploads/${item.file_name}`}} style={styles.productImage} />
         ):(
           <Image source={require('../../../assets/images/2.png')} style={styles.productImage} />
         )}
-                 {/* <Image source={{ uri:`http://43.228.126.245/EMS-API/storage/uploads/${item.image}`}} style={styles.productImage} /> */}
+                 {/* <Image source={{ uri:`http://43.228.126.245/EMS-API2/storage/uploads/${item.image}`}} style={styles.productImage} /> */}
               </View>
                 <View style={styles.cartItemDetails}>
                   <Text style={styles.cartItemTitle}>{item.title}</Text>

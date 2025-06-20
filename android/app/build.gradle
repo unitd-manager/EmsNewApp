@@ -73,9 +73,20 @@ def enableProguardInReleaseBuilds = false
  */
 def jscFlavor = 'io.github.react-native-community:jsc-android:2026004.+'
 
+configurations {
+    all {
+        exclude group: 'com.android.support'
+        exclude module: 'support-v4'
+        exclude module: 'support-annotations'
+        exclude module: 'support-compat'
+        resolutionStrategy {
+            // Add resolution strategy configurations here if needed
+        }
+    }
+}
+
 android {
     ndkVersion rootProject.ext.ndkVersion
-    buildToolsVersion rootProject.ext.buildToolsVersion
     compileSdk rootProject.ext.compileSdkVersion
 
     namespace "com.emsnewapp"
@@ -85,15 +96,6 @@ android {
         targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode 1
         versionName "1.0"
-    }
-
-    configurations {
-        all {
-            exclude group: 'com.android.support'
-            exclude module: 'support-v4'
-            exclude module: 'support-annotations'
-            exclude module: 'support-compat'
-        }
     }
 
     packagingOptions {

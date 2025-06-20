@@ -14,7 +14,6 @@ import Carousel, { Pagination } from 'react-native-snap-carousel'
 import SmallCardComponent from '../../../components/homeComponent/SmallCardComponent';
 import EText from '../../../components/common/EText';
 import EHeader from '../../../components/common/EHeader';
-// import TrackPlayer from 'react-native-track-player';
 import api from '../../../api/api';
 
 const HomeTab = () => {

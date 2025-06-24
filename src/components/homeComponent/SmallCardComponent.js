@@ -49,80 +49,37 @@ export default function SmallCardComponent({item, user, index,getMenus}) {
 
   const [englishTitle, tamilTitle] = (item?.section_title || '').split(' / ');
 
-  if (!userContactId) {
-    return (
-      <>
-        {item.section_title !== 'My Profile' && (
-          <TouchableOpacity
-            style={[
-              localStyles.root,
-              index % 2 === 0 ? styles.mr5 : styles.ml5,
-              {backgroundColor: '#532c6d' ? '#532c6d' : '#532c6d'},
-            ]}
-            onPress={() => {
-              navigation.navigate(item.routes, { item, user })
-            }}>
+  // Temporarily render always regardless of userContactId to test visibility
+  return (
+    <TouchableOpacity
+      style={[
+        localStyles.root,
+        index % 2 === 0 ? styles.mr5 : styles.ml5,
+        { backgroundColor: '#532c6d' ? '#532c6d' : '#532c6d' },
+      ]}
+      onPress={() => {
+        navigation.navigate(item.routes, { item, user });
+      }}
+    >
+      <Image
+        source={{
+          uri: `http://43.228.126.245/EMS-API2/storage/uploads/${item?.file_name}`,
+        }}
+        style={localStyles.imageStyle}
+      ></Image>
 
-            <Image
-              source={{
-                uri: `http://43.228.126.245/EMS-API2/storage/uploads/${item?.file_name}`,
-              }}
-              style={localStyles.imageStyle}>
-            </Image>
-
-            <EText
-              type={'S16'}
-              numberOfLines={1}
-              style={localStyles.textStyle}>
-              {englishTitle}
-            </EText>
-            <EText
-              type={'S16'}
-              numberOfLines={1}
-              style={[localStyles.textStyle, {marginTop: 2}]}>
-              {tamilTitle}
-            </EText>
-          </TouchableOpacity>
-        )}
-      </>
-    );
-  } else {
-    return (
-      <>
-          <TouchableOpacity
-            style={[
-              localStyles.root,
-              index % 2 === 0 ? styles.mr5 : styles.ml5,
-              {backgroundColor: '#532c6d' ? '#532c6d' : '#532c6d'},
-            ]}
-            onPress={() => {
-              navigation.navigate(item.routes, { item, user })
-            }}>
-
-            <Image
-              source={{
-                uri: `http://43.228.126.245/EMS-API2/storage/uploads/${item?.file_name}`,
-              }}
-              style={localStyles.imageStyle}>
-            </Image>
-
-            <EText
-              type={'S16'}
-              numberOfLines={1}
-              style={localStyles.textStyle}>
-              {englishTitle}
-            </EText>
-            <EText
-              type={'S16'}
-              numberOfLines={1}
-              style={[localStyles.textStyle, {marginTop: 2}]}>
-              {tamilTitle}
-            </EText>
-          </TouchableOpacity>
-     
-      </>
-    );
-  }
+      <EText type={'S16'} numberOfLines={1} style={localStyles.textStyle}>
+        {englishTitle}
+      </EText>
+      <EText
+        type={'S16'}
+        numberOfLines={1}
+        style={[localStyles.textStyle, { marginTop: 2 }]}
+      >
+        {tamilTitle}
+      </EText>
+    </TouchableOpacity>
+  );
 }
 
 const localStyles = StyleSheet.create({

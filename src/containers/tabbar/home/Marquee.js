@@ -35,7 +35,7 @@ const Marquee = ({ text, onPress }) => {
                 {
                   translateX: scrollX.interpolate({
                     inputRange: [0, 1],
-                    outputRange: [0, -1000] // Adjust this value based on your content length
+                    outputRange: [0, -300] // Adjusted to smaller value for better visibility
                   })
                 }
               ]

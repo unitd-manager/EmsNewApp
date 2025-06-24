@@ -5,7 +5,7 @@ import Video from 'react-native-video';
 import api from '../../api/api';
 import { Picker } from '@react-native-picker/picker';
 import DateTimePickerModal from "react-native-modal-datetime-picker";
-import Slider from 'react-native-slider';
+//import Slider from 'react-native-slider';
 
 const PlayAudio = () => {
   const PAGE_SIZE = 8;
@@ -85,7 +85,7 @@ const PlayAudio = () => {
                   setIsPlayingArray(updatedIsPlayingArray);
                 }}
               />
-              <Slider
+              {/* <Slider
                 value={progressArray[index]?.position}
                 maximumValue={progressArray[index]?.duration || 0}
                 minimumValue={0}
@@ -97,7 +97,7 @@ const PlayAudio = () => {
                   // Seek to the new position (you can also implement seeking functionality)
                   // setSeekPosition(value);
                 }}
-              />
+              /> */}
             </View>
           ))}
         </ScrollView>

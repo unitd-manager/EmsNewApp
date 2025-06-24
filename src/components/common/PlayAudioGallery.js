@@ -1,46 +1,55 @@
-import React, { useCallback, useEffect, useState } from 'react';
-import { SafeAreaView, StyleSheet, Text, Slider, TouchableOpacity, View, ScrollView, AppState, ActivityIndicator } from 'react-native';
+import React, { useEffect, useState, useRef } from 'react';
+import { SafeAreaView, StyleSheet, Text, TouchableOpacity, View, ScrollView, AppState, ActivityIndicator } from 'react-native';
 import { useRoute } from '@react-navigation/native';
 import AntDesign from 'react-native-vector-icons/AntDesign';
+import Sound from 'react-native-sound';
 import EHeader from './EHeader';
-import TrackPlayer, { useProgress, Event } from 'react-native-track-player';
 import { moderateScale } from '../../common/constants';
 import api from '../../api/api';
+import Slider from '@react-native-community/slider';
 
 const PlayAudio = () => {
   const route = useRoute();
-  // console.log('route',route.params.SubId)
   const PAGE_SIZE = 10;
-  const [listData, setListData] = useState()
+  const [listData, setListData] = useState();
   const [currentPage, setCurrentPage] = useState(1);
+
+  const [isPlayingArray, setIsPlayingArray] = useState([]);
+  const [currentTrackIndex, setCurrentTrackIndex] = useState(null);
+  const [progressArray, setProgressArray] = useState([]);
+  const soundRef = useRef(null);
+  const progressInterval = useRef(null);
 
   const getMenus = () => {
     api
-      .post('/content/getThoguppugalSubContent', {sub_category_id:route.params.SubId,
-      params: {
-        page: currentPage,
-        pageSize: PAGE_SIZE,
-      },
-    })
-      
-      .then(res => {
+      .post('/content/getThoguppugalSubContent', {
+        sub_category_id: route.params.SubId,
+        params: {
+          page: currentPage,
+          pageSize: PAGE_SIZE,
+        },
+      })
+      .then((res) => {
         const serverPath = 'http://43.228.126.245/EMS-API2/storage/uploads/';
-        const audioData = res.data.data.map(item => ({
+        const audioData = res.data.data.map((item) => ({
           ...item,
           url: serverPath + item.file_name,
         }));
         setListData(audioData);
+        setIsPlayingArray(Array(audioData.length).fill(false));
+        setProgressArray(Array(audioData.length).fill({ position: 0, duration: 0 }));
       })
-      .catch(error => {
-        console.log("error", error)
+      .catch((error) => {
+        console.log('error', error);
       });
-
   };
+
   useEffect(() => {
     getMenus(currentPage);
   }, [currentPage]);
 
   const onEndReached = () => {
+    if (!listData) return;
     const totalItems = listData.length;
     const totalPages = Math.ceil(totalItems / PAGE_SIZE);
 
@@ -49,99 +58,116 @@ const PlayAudio = () => {
     }
   };
 
-
-  const progress = useProgress();
-
-  const [isPlayingArray, setIsPlayingArray] = useState(Array(listData?.length).fill(false));
-  const [currentTrackIndex, setCurrentTrackIndex] = useState(null);
-  const [progressArray, setProgressArray] = useState(Array(listData?.length).fill({ position: 0, duration: 0 }));
-
-  const pauseOnUnmount = async () => {
-    // Pause and reset the current track when the component is unmounted
-    await TrackPlayer.pause();
+  const pauseOnUnmount = () => {
+    if (soundRef.current) {
+      soundRef.current.stop(() => {
+        soundRef.current.release();
+        soundRef.current = null;
+      });
+    }
     setIsPlayingArray(Array(listData?.length).fill(false));
     setCurrentTrackIndex(null);
-  }
-
-  useEffect(() => {
-    const unsubscribe = TrackPlayer.addEventListener(Event.PlaybackTrackChanged, (event) => {
-      console.log("Current Track: ", event.nextTrack)
-      if (event.nextTrack) {
-        const updatedIsPlayingArray = [...isPlayingArray]
-        updatedIsPlayingArray[event.nextTrack] = true
-        setIsPlayingArray(updatedIsPlayingArray);
-        setCurrentTrackIndex(event.nextTrack)
-      }
-    })
-    const subscription = AppState.addEventListener('blur', () => {
-      pauseOnUnmount()
-    });
-    return () => {
-      unsubscribe.remove()
-      subscription.remove();
+    if (progressInterval.current) {
+      clearInterval(progressInterval.current);
     }
-  }, [])
-
-  useEffect(() => {
-    const setupPlayerAndAddTracks = async () => {
-      await TrackPlayer.setupPlayer();
-      await TrackPlayer.add(listData);
-      const initialState = await TrackPlayer.getState();
-    };
-
-    if (listData) {
-      setupPlayerAndAddTracks();
-    }
-
-    return () => {
-      TrackPlayer.pause();
-    };
-  }, [listData]);
-
-  useEffect(() => {
-    return () => pauseOnUnmount()
-  }, [])
-
-  const playPause = async (index) => {
-    const updatedIsPlayingArray = [...isPlayingArray];
-    const isCurrentlyPlaying = currentTrackIndex === index;
-
-    try {
-      if (isCurrentlyPlaying && updatedIsPlayingArray[index]) {
-        await TrackPlayer.pause();
-        updatedIsPlayingArray[index] = false;
-      } else {
-        if (currentTrackIndex !== null) {
-          updatedIsPlayingArray[currentTrackIndex] = false;
-          await TrackPlayer.pause();
-        }
-
-        await TrackPlayer.skip(index);
-        await TrackPlayer.play();
-
-        updatedIsPlayingArray[index] = true;
-        setCurrentTrackIndex(index);
-        // Check TrackPlayer state after play
-        const state = await TrackPlayer.getState();
-      }
-    } catch (error) {
-      console.error('Error playing track:', error);
-    }
-
-    setIsPlayingArray(updatedIsPlayingArray);
   };
 
   useEffect(() => {
-    setProgressArray(Array(listData?.length).fill({ position: 0, duration: 0 }));
-  }, [listData]);
+    const subscription = AppState.addEventListener('blur', () => {
+      pauseOnUnmount();
+    });
+    return () => {
+      subscription.remove();
+      pauseOnUnmount();
+    };
+  }, []);
 
+  const playPause = (index) => {
+    if (currentTrackIndex === index && isPlayingArray[index]) {
+      // Pause current playing track
+      if (soundRef.current) {
+        soundRef.current.pause();
+      }
+      updateIsPlayingArray(index, false);
+      if (progressInterval.current) {
+        clearInterval(progressInterval.current);
+      }
+    } else {
+      // Stop previous track
+      if (soundRef.current) {
+        soundRef.current.stop(() => {
+          soundRef.current.release();
+          soundRef.current = null;
+        });
+      }
+      // Play new track
+      const track = listData[index];
+      const soundInstance = new Sound(track.url || track.file || '', Sound.MAIN_BUNDLE, (error) => {
+        if (error) {
+          console.log('Failed to load the sound', error);
+          return;
+        }
+        soundRef.current = soundInstance;
+        soundInstance.play((success) => {
+          if (success) {
+            // Auto play next track
+            if (index < listData.length - 1) {
+              playPause(index + 1);
+            } else {
+              updateIsPlayingArray(index, false);
+              setCurrentTrackIndex(null);
+              if (progressInterval.current) {
+                clearInterval(progressInterval.current);
+              }
+            }
+          } else {
+            console.log('Playback failed due to audio decoding errors');
+          }
+        });
+        updateIsPlayingArray(index, true);
+        setCurrentTrackIndex(index);
+        setProgress(index, 0, soundInstance.getDuration());
+        if (progressInterval.current) {
+          clearInterval(progressInterval.current);
+        }
+        progressInterval.current = setInterval(() => {
+          soundInstance.getCurrentTime((seconds) => {
+            setProgress(index, seconds, soundInstance.getDuration());
+          });
+        }, 1000);
+      });
+    }
+  };
+
+  const updateIsPlayingArray = (index, playing) => {
+    const updated = [...isPlayingArray];
+    updated.fill(false);
+    if (playing) {
+      updated[index] = true;
+    }
+    setIsPlayingArray(updated);
+  };
+
+  const setProgress = (index, position, duration) => {
+    const updated = [...progressArray];
+    updated[index] = { position, duration };
+    setProgressArray(updated);
+  };
+
+  const seekTo = (index, value) => {
+    if (soundRef.current && currentTrackIndex === index) {
+      soundRef.current.setCurrentTime(value);
+      setProgress(index, value, progressArray[index]?.duration);
+    }
+  };
 
   return (
     <SafeAreaView style={{ flex: 1 }}>
-       <EHeader title="Songs" onPress={() => navigation.pop()} />
+      <EHeader title="Songs" />
       {listData ? (
         <View style={styles.container}>
-          <ScrollView style={{ flex: 1 }}
+          <ScrollView
+            style={{ flex: 1 }}
             onScroll={({ nativeEvent }) => {
               const yOffset = nativeEvent.contentOffset.y;
               const height = nativeEvent.layoutMeasurement.height;
@@ -151,7 +177,8 @@ const PlayAudio = () => {
                 onEndReached();
               }
             }}
-            scrollEventThrottle={400}>
+            scrollEventThrottle={400}
+          >
             {listData.slice(0, currentPage * PAGE_SIZE)?.map((item, index) => (
               <View style={styles.singleContainer} key={index}>
                 <View style={styles.cardTopRow}>
@@ -179,30 +206,16 @@ const PlayAudio = () => {
                   </TouchableOpacity>
 
                   <View style={styles.sliderView}>
-                    {isPlayingArray[index] ? (
-                      <Slider
-                        value={progress?.position}
-                        maximumValue={progress.duration}
-                        minimumValue={0}
-                        thumbStyle={{ width: 20, height: 20 }}
-                        thumbTintColor={'black'}
-                        minimumTrackTintColor={'black'}
-                        maximumTrackTintColor={'black'}
-                        onValueChange={async (value) => {
-                          await TrackPlayer.seekTo(value);
-                        }}
-                      />
-                    ) : (
-                      <Slider
-                        value={progressArray[index]?.position}
-                        minimumValue={0}
-                        thumbStyle={{ width: 20, height: 20 }}
-                        thumbTintColor={'black'}
-                        minimumTrackTintColor={'black'}
-                        maximumTrackTintColor={'black'}
-                        onValueChange={async (value) => await TrackPlayer.seekTo(value)}
-                      />
-                    )}
+                    <Slider
+                      value={progressArray[index]?.position}
+                      maximumValue={progressArray[index]?.duration}
+                      minimumValue={0}
+                     thumbStyle={{ width: 20, height: 20 }}
+                      thumbTintColor={'black'}
+                      minimumTrackTintColor={'black'}
+                      maximumTrackTintColor={'black'}
+                      onValueChange={(value) => seekTo(index, value)}
+                    />
                   </View>
                 </View>
               </View>
@@ -221,7 +234,6 @@ const PlayAudio = () => {
 
 export default PlayAudio;
 
-
 const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -230,10 +242,10 @@ const styles = StyleSheet.create({
   },
   titleText: {
     color: '#117a4c',
-    fontWeight: '700'
+    fontWeight: '700',
   },
   pageNumberText: {
-    textAlign:'center',
+    textAlign: 'center',
     fontSize: 16,
     fontWeight: 'bold',
     color: '#532c6d',
@@ -292,6 +304,6 @@ const styles = StyleSheet.create({
   },
   sliderView: {
     alignSelf: 'center',
-    width: '90%'
+    width: '90%',
   },
 });

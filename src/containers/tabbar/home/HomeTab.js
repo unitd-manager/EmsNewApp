@@ -7,10 +7,10 @@ import { useSelector } from 'react-redux';
 import {FlashList} from '@shopify/flash-list';
 import {StackNav} from '../../../navigation/NavigationKeys';
 import {useNavigation} from '@react-navigation/native';
-// Custom Imports
+// Custom Imports 
 import { styles } from '../../../themes';
 import CarouselCardItem, { SLIDER_WIDTH, ITEM_WIDTH } from '../../../components/CarouselCardItem';
-import Carousel, { Pagination } from 'react-native-snap-carousel'
+//import Carousel, { Pagination } from 'react-native-snap-carousel'
 import SmallCardComponent from '../../../components/homeComponent/SmallCardComponent';
 import EText from '../../../components/common/EText';
 import EHeader from '../../../components/common/EHeader';
@@ -152,7 +152,7 @@ const marqueeValue =marquee && marquee[0]?.value
             justifyContent: 'center',
            paddingBottom: 0,
           }}>
-            <Carousel
+            {/* <Carousel
              layout="tinder"
              layoutCardOffset={9}
              ref={isCarousel}
@@ -189,7 +189,7 @@ const marqueeValue =marquee && marquee[0]?.value
               inactiveDotOpacity={0.4}
               inactiveDotScale={0.6}
               tappableDots={true}
-            />
+            /> */}
           </View>
         </View>
         <View style={{ marginBottom:10}} >

@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "555146945450",
+    "project_id": "ems-app-5f2c2",
+    "storage_bucket": "ems-app-5f2c2.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:555146945450:android:9da95a09708dac6a1501d3",
+        "android_client_info": {
+          "package_name": "com.emsnewapp"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCZyW7m_N8jvpS6JomeCMjfNGml_R2eU48"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

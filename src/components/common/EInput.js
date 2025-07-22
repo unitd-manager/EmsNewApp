@@ -5,7 +5,7 @@ import {getHeight, moderateScale} from '../../common/constants';
 import {styles} from '../../themes';
 import typography from '../../themes/typography';
 import EText from './EText';
-
+ 
 export default EInput = props => {
   let {
     _value,

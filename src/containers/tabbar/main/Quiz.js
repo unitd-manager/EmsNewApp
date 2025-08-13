@@ -22,7 +22,7 @@ import HTML from 'react-native-render-html';
 import ShowResult from './ShowResult';
 import EButton from '../../../components/common/EButton';
 import {useSelector} from 'react-redux';
-import { StackNav } from '../../../navigation/NavigationKeys';
+import {StackNav} from '../../../navigation/NavigationKeys';
 
 const stripHtmlTags = htmlString => {
   return htmlString ? (
@@ -42,12 +42,12 @@ const Quiz = ({navigation}) => {
   const [loadedQuestionIds, setLoadedQuestionIds] = useState(new Set());
   const colors = useSelector(state => state.theme.theme);
 
-  const onPressBack = () => { 
+  const onPressBack = () => {
     navigation.navigate(StackNav.Login);
   };
-  
-   const questionIndex = clients.length
-   console.log('questionIndex',questionIndex) 
+
+  const questionIndex = clients.length;
+  console.log('questionIndex', questionIndex);
   // console.log('answerResult', answerResult);
 
   const openModal = url => {
@@ -77,15 +77,15 @@ const Quiz = ({navigation}) => {
   console.log('contactName', contactName);
 
   const Reset = () => {
-    api.post('/content/deleteAnswerReset', {
-      contact_id: contactId,
-    }).then(res =>{
-       if(res && res.data.msg === 'Success'){
-        Alert.alert('successfully Reset ')   
-      }
-
-    })
-
+    api
+      .post('/content/deleteAnswerReset', {
+        contact_id: contactId,
+      })
+      .then(res => {
+        if (res && res.data.msg === 'Success') {
+          Alert.alert('successfully Reset ');
+        }
+      });
   };
 
   useEffect(() => {
@@ -113,9 +113,14 @@ const Quiz = ({navigation}) => {
 
         Promise.all(promises)
           .then(answers => {
-            const newClients = res.data.data.filter((_, index) => answers[index]);
+            const newClients = res.data.data.filter(
+              (_, index) => answers[index],
+            );
             setClients(prevClients => [...prevClients, ...newClients]);
-            setAnswerDetails(prevAnswers => [...prevAnswers, ...answers.filter(Boolean)]);
+            setAnswerDetails(prevAnswers => [
+              ...prevAnswers,
+              ...answers.filter(Boolean),
+            ]);
           })
           .catch(error => {
             console.log('Error fetching answers:', error);
@@ -135,7 +140,6 @@ const Quiz = ({navigation}) => {
       setCurrentPage(prevPage => prevPage + 1);
     }
   };
- 
 
   const handleCheckboxChange = (questionId, answerId, status) => {
     setCheckedItems({
@@ -198,18 +202,17 @@ const Quiz = ({navigation}) => {
         }
       });
   };
-  console.log('currentPage',currentPage)
-  console.log('clients',clients.length)
-  console.log('checkedItemslength',checkedItems.length)
-  console.log('checkedItems',checkedItems)
-  const len = Object.keys(checkedItems).length
-  console.log('len',len)
+  console.log('currentPage', currentPage);
+  console.log('clients', clients.length);
+  console.log('checkedItemslength', checkedItems.length);
+  console.log('checkedItems', checkedItems);
+  const len = Object.keys(checkedItems).length;
+  console.log('len', len);
   const renderItem = ({item, index}) => {
     const isChecked = checkedItems[item.question_id] || null;
     const answers = answerDetails[index] || [];
 
-    return (
-      contactId ? (
+    return contactId ? (
       <View style={localStyles.container}>
         <View style={localStyles.itemContainer}>
           <LinearGradient
@@ -223,94 +226,103 @@ const Quiz = ({navigation}) => {
             </View>
 
             {answers.map(answer => (
-              
-                <RadioButton
-                  key={answer.answer_id}
-                  isChecked={isChecked === answer.answer_id}
-                  label={stripHtmlTags(answer.description)}
-                  onSelect={() =>
-                    handleCheckboxChange(
-                      item.question_id,
-                      answer.answer_id,
-                      answer.status,
-                    )
-                  }
-                  textColor='black'
-                />
-            
+              <RadioButton
+                key={answer.answer_id}
+                isChecked={isChecked === answer.answer_id}
+                label={stripHtmlTags(answer.description)}
+                onSelect={() =>
+                  handleCheckboxChange(
+                    item.question_id,
+                    answer.answer_id,
+                    answer.status,
+                  )
+                }
+                textColor="black"
+              />
             ))}
           </LinearGradient>
         </View>
       </View>
-      ):(<Text></Text>)
+    ) : (
+      <Text></Text>
     );
-    
   };
   return (
     <>
-      <EHeader title="Quiz"   />
-      { contactId !== null &&<Text style={localStyles.title1}>(If you check all answers your result will be showing)</Text>}
-     { contactId === null &&
-      <EText
-        type={'b24'}
-        marginTop ={200}
-        marginLeft ={50}
-        color={colors.dark ? 'blue' : 'blue'}>
-        {strings.seeTheQuiz}
-      </EText>
-     } 
-     {contactId === null && <TouchableOpacity
-                onPress={onPressBack}
-                style={localStyles.signUpContainer}>
-                <EText
-                  type={'b22'}
-                  marginTop ={10}
-                  color={colors.dark ? 'red' : 'red'}>
-                  {strings.plsLoginFirst}
-                </EText>
-              </TouchableOpacity>
-     }        
+      <EHeader title="Quiz" />
+      {contactId !== null && (
+        <Text style={localStyles.title1}>
+          (If you check all answers your result will be showing)
+        </Text>
+      )}
+      {contactId === null && (
+        <EText
+          type={'b24'}
+          marginTop={200}
+          marginLeft={50}
+          color={colors.dark ? 'blue' : 'blue'}>
+          {strings.seeTheQuiz}
+        </EText>
+      )}
+      {contactId === null && (
+        <TouchableOpacity
+          onPress={onPressBack}
+          style={localStyles.signUpContainer}>
+          <EText
+            type={'b22'}
+            marginTop={10}
+            color={colors.dark ? 'red' : 'red'}>
+            {strings.plsLoginFirst}
+          </EText>
+        </TouchableOpacity>
+      )}
       <SafeAreaView style={localStyles.container}>
-      <FlatList
+        <FlatList
           data={clients.slice(0, currentPage * PAGE_SIZE)}
           renderItem={renderItem}
           keyExtractor={item => item.question_id}
-          contentContainerStyle={{ paddingBottom: 120 }}
+          contentContainerStyle={{paddingBottom: 120}}
           onEndReached={loadMoreQuestions}
           onEndReachedThreshold={0.1}
         />
         <View style={localStyles.btnContainer}>
-        <TouchableOpacity>
-          
-         {parseFloat(clients?.length)  === parseFloat(len )&& <EButton
-            onPress={() => openModal()}
-            title={strings.ShowYourResult}
-            type={'S16'}
-            containerStyle={localStyles.signBtnContainer}
-          />}
-        </TouchableOpacity>
-        <TouchableOpacity>
-          
-         {parseFloat(clients?.length)  === parseFloat(len )&& <EButton
-            onPress={() => Reset()}
-            title={strings.Reset}
-            type={'S16'}
-            bgColor={"#532C6D"}
-            containerStyle={localStyles.signBtnContainer1}
-          />}
-        </TouchableOpacity>
-       {modalVisible && <ShowResult
-          visible={modalVisible}
-          resultData={contactId}
-          questionIndex ={questionIndex}
-          onClose={closeModal}
-        />}
+          <TouchableOpacity style={localStyles.signBtnContainer}>
+            {parseFloat(clients?.length) === parseFloat(len) && (
+              <EButton
+                onPress={() => openModal()}
+                title={strings.ShowYourResult}
+                type={'S16'}
+                containerStyle={{borderRadius: 10}}
+              />
+            )}
+          </TouchableOpacity>
+          <TouchableOpacity style={localStyles.signBtnContainer}>
+            {parseFloat(clients?.length) === parseFloat(len) && (
+              <EButton
+                onPress={() => Reset()}
+                title={strings.Reset}
+                type={'S16'}
+                bgColor={'#532C6D'}
+                containerStyle={{borderRadius: 10}}
+              />
+            )}
+          </TouchableOpacity>
         </View>
-       {contactId !== null && <View style={localStyles.pageNumberContainer}>
-          <Text style={localStyles.pageNumberText}>
-            Page {currentPage} of {Math.ceil(clients.length / PAGE_SIZE)}
-          </Text>
-        </View>}
+        {modalVisible && (
+          <ShowResult
+            visible={modalVisible}
+            resultData={contactId}
+            questionIndex={questionIndex}
+            onClose={closeModal}
+          />
+        )}
+        {contactId !== null && (
+          <View style={localStyles.pageNumberContainer}>
+            <Text style={localStyles.pageNumberText}>
+              Page {currentPage} of {Math.ceil(clients.length / PAGE_SIZE)}
+            </Text>
+          </View>
+        )}
       </SafeAreaView>
     </>
   );
@@ -320,10 +332,18 @@ const localStyles = StyleSheet.create({
     flex: 1,
   },
   btnContainer: {
-    ...styles.mh20,
-    ...styles.mb10,
-    ...styles.rowSpaceAround,
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+
+    paddingHorizontal: 20, // optional instead of mh20
+    marginBottom: '10%', // instead of mb10
   },
+  signBtnContainer: {
+    height: getHeight(50),
+    borderRadius: 0,
+    width: '48%', // small adjustment to prevent overflow
+  },
+
   pageNumberContainer: {
     ...styles.center,
     marginTop: 10,
@@ -348,20 +368,7 @@ const localStyles = StyleSheet.create({
     ...styles.rowCenter,
     ...styles.mb20,
   },
-  signBtnContainer: {
-     ...styles.center,
-    width: '85%',
-    ...styles.mv20,
-    height: getHeight(50),
-    borderRadius: 10,
-  },
-  signBtnContainer1: {
-    ...styles.center,
-   width: '100%',
-   ...styles.mv20,
-   height: getHeight(50),
-   borderRadius: 10,
- },
+
   item: {
     height: 260,
     borderRadius: 8,
@@ -380,7 +387,7 @@ const localStyles = StyleSheet.create({
     marginLeft: 20,
     color: '#532c6d',
     marginBottom: 10,
-    marginTop:10
+    marginTop: 10,
   },
   title2: {
     fontSize: 25,
@@ -388,7 +395,7 @@ const localStyles = StyleSheet.create({
     marginLeft: 20,
     color: 'red',
     marginBottom: -300,
-    marginTop:300
+    marginTop: 300,
   },
   title3: {
     fontSize: 23,
@@ -396,8 +403,8 @@ const localStyles = StyleSheet.create({
     marginLeft: 20,
     color: 'blue',
     marginBottom: -300,
-    marginTop:300,
-    marginLeft:70
+    marginTop: 300,
+    marginLeft: 70,
   },
   indexNum: {
     fontWeight: '700',

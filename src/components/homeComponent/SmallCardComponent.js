@@ -1,8 +1,4 @@
-import {
-  Image,
-  StyleSheet,
-  TouchableOpacity,
-} from 'react-native';
+import {Image, StyleSheet, TouchableOpacity} from 'react-native';
 import {useNavigation} from '@react-navigation/native';
 
 // Custom Imports
@@ -10,16 +6,15 @@ import EText from '../common/EText';
 import {commonColor, styles} from '../../themes';
 import {deviceWidth, moderateScale} from '../../common/constants';
 import React, {useState, useEffect} from 'react';
-import AsyncStorage from '@react-native-async-storage/async-storage'
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import api from '../../api/api';
 // import { ElevationLevels } from 'react-native-paper/lib/typescript/types';
 
-export default function SmallCardComponent({item, user, index,getMenus}) {
-
+export default function SmallCardComponent({item, user, index, getMenus}) {
   const navigation = useNavigation();
   const [userContactId, setUserContactId] = useState(null);
-  
-  console.log('item', item.section_title)
+
+  console.log('item', item.section_title);
 
   useEffect(() => {
     const getUserCart = async () => {
@@ -33,19 +28,17 @@ export default function SmallCardComponent({item, user, index,getMenus}) {
           })
           .then(res => {
             const contactCri = res.data.data;
-            // setUserContactId(contactCri[0].contact_id)      
+            // setUserContactId(contactCri[0].contact_id)
           });
       } catch (error) {
         console.error('Error fetching cart:', error);
       }
     };
-   
+
     getUserCart();
-  
   }, []);
 
-   
-  console.log('userContactId', userContactId)
+  console.log('userContactId', userContactId);
 
   const [englishTitle, tamilTitle] = (item?.section_title || '').split(' / ');
 
@@ -55,18 +48,16 @@ export default function SmallCardComponent({item, user, index,getMenus}) {
       style={[
         localStyles.root,
         index % 2 === 0 ? styles.mr5 : styles.ml5,
-        { backgroundColor: '#532c6d' ? '#532c6d' : '#532c6d' },
+        {backgroundColor: '#532c6d' ? '#532c6d' : '#532c6d'},
       ]}
       onPress={() => {
-        navigation.navigate(item.routes, { item, user });
-      }}
-    >
+        navigation.navigate(item.routes, {item, user});
+      }}>
       <Image
         source={{
-          uri: `http://43.228.126.245/EMS-API2/storage/uploads/${item?.file_name}`,
+          uri: `https://ems.unitdtechnologies.com/storage/${item?.file_name}`,
         }}
-        style={localStyles.imageStyle}
-      ></Image>
+        style={localStyles.imageStyle}></Image>
 
       <EText type={'S16'} numberOfLines={1} style={localStyles.textStyle}>
         {englishTitle}
@@ -74,8 +65,7 @@ export default function SmallCardComponent({item, user, index,getMenus}) {
       <EText
         type={'S16'}
         numberOfLines={1}
-        style={[localStyles.textStyle, { marginTop: 2 }]}
-      >
+        style={[localStyles.textStyle, {marginTop: 2}]}>
         {tamilTitle}
       </EText>
     </TouchableOpacity>
@@ -95,15 +85,15 @@ const localStyles = StyleSheet.create({
   imageStyle: {
     width: 50,
     height: 50,
-    alignSelf:'center',
-   resizeMode: 'cover',
+    alignSelf: 'center',
+    resizeMode: 'cover',
   },
   textStyle: {
     ...styles.mt10,
     ...styles.flex,
-    alignSelf:'center',
-    fontSize:13,
-    color:commonColor.white,
+    alignSelf: 'center',
+    fontSize: 13,
+    color: commonColor.white,
   },
   locationSubContainer: {
     ...styles.flexRow,

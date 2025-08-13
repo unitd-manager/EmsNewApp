@@ -128,7 +128,7 @@ const HomeTab = () => {
                       marginLeft: 2,
                     }}
                     source={{
-                      uri: `https://ems.unitdtechnologies.com/storage/${item.file_name}`,
+                      uri: `http://43.228.126.245/EMS-API2/storage/uploads/${item.file_name}`,
                     }}
                   />
                 </TouchableOpacity>

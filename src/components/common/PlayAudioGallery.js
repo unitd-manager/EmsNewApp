@@ -7,6 +7,7 @@ import EHeader from './EHeader';
 import { moderateScale } from '../../common/constants';
 import api from '../../api/api';
 import Slider from '@react-native-community/slider';
+import imageBase from '../../api/imageBase';
 
 const PlayAudio = () => {
   const route = useRoute();
@@ -30,7 +31,7 @@ const PlayAudio = () => {
         },
       })
       .then((res) => {
-        const serverPath = 'http://43.228.126.245/EMS-API2/storage/uploads/';
+const serverPath = imageBase;
         const audioData = res.data.data.map((item) => ({
           ...item,
           url: serverPath + item.file_name,

@@ -6,6 +6,7 @@ import { useRoute } from '@react-navigation/native';
 import EHeader from '../../../components/common/EHeader';
 import api from '../../../api/api';
 import { useNavigation } from '@react-navigation/native';
+import imageBase from '../../../api/imageBase';
 import { StackNav } from '../../../navigation/NavigationKeys';
 import { Picker } from '@react-native-picker/picker';
 import DateTimePickerModal from "react-native-modal-datetime-picker";
@@ -325,7 +326,7 @@ const filteredGallery = applyFilters();
       <View style={styles.productImageContainer}>
         {item.image !== null ? (
           <Image
-            source={{ uri: `http://43.228.126.245/EMS-API2/storage/uploads/${item.file_name}` }}
+            source={{ uri: `${imageBase}${item.file_name}` }}
             style={styles.productImage}
           />
         ) : (

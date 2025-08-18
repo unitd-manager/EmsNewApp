@@ -6,6 +6,7 @@ import ShowImage from '../../../components/homeComponent/ShowImage';
 import DropDownPicker from 'react-native-dropdown-picker';
 import { Picker } from '@react-native-picker/picker';
 import DateTimePickerModal from "react-native-modal-datetime-picker";
+import imageBase from '../../../api/imageBase';
 
 let deviceHeight = Dimensions.get('window').height;
 let deviceWidth = Dimensions.get('window').width;
@@ -246,7 +247,7 @@ const PhotoGallery = () => {
             filteredGallery.map((img, i) => (
                 <TouchableOpacity key={i} onPress={() => openModal(img.file_name)}>
                     <Image
-                        source={{ uri: `http://43.228.126.245/EMS-API2/storage/uploads/${img.file_name}` }}
+source={{ uri: `${imageBase}${img.file_name}` }}
                         style={{
                             height: deviceHeight / 7,
                             width: deviceWidth / 3 - 6,
@@ -261,7 +262,7 @@ const PhotoGallery = () => {
             filteredGallery.map((img, i) => (
                 <TouchableOpacity key={i} onPress={() => openModal(img.file_name)}>
                     <Image
-                        source={{ uri: `http://43.228.126.245/EMS-API2/storage/uploads/${img.file_name}` }}
+                        source={{ uri: `${imageBase}${img.file_name}` }}
                         style={{
                             height: deviceHeight / 7,
                             width: deviceWidth / 3 - 6,

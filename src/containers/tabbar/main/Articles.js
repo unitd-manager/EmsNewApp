@@ -12,6 +12,7 @@ import {
   ActivityIndicator
 } from 'react-native';
 import React, { useState, useEffect } from 'react';
+import imageBase from '../../../api/imageBase';
 import { useRoute } from '@react-navigation/native';
 import api from '../../../api/api';
 // import AboutCategoryDetail from './AboutCategoryDetail';
@@ -214,7 +215,7 @@ const filteredGallery = applyFilters();
                     <Image
                       style={styles.tinyLogo}
                       source={{
-                        uri: `http://43.228.126.245/EMS-API2/storage/uploads/${item.file_name}`,
+                        uri: `${imageBase}${item.file_name}`,
                       }}
                     />
                     <View>

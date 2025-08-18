@@ -15,7 +15,8 @@ import {
 } from 'react-native';
 import React, { useState, useEffect } from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { useRoute, useNavigation } from '@react-navigation/native';
+import { useNavigation } from '@react-navigation/native';
+import imageBase from '../../../api/imageBase';
 import api from '../../../api/api';
 import { StackNav } from '../../../navigation/NavigationKeys';
 import AboutCategoryDetail from './AboutCategoryDetail';
@@ -225,7 +226,7 @@ const ListFlat = () => {
                   onPress={() => handleItemPress(item.magazine_id)}>
                   <Image
                     style={styles.tinyLogo}
-                    source={{ uri: `http://43.228.126.245/EMS-API2/storage/uploads/${item.file_name}` }}
+                    source={{ uri: `${imageBase}${item.file_name}` }}
                   />
                   <Text style={styles.titleText}>{item.title}</Text>
                 </Pressable>

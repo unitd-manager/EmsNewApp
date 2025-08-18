@@ -7,6 +7,7 @@ import { useNavigation } from '@react-navigation/native';
 import EHeader from '../../../components/common/EHeader';
 import { Picker } from '@react-native-picker/picker';
 import RazorpayCheckout from 'react-native-razorpay';
+import imageBase from '../../../api/imageBase';
 
 
 const ProductViewCart = ({ route }) => {
@@ -350,7 +351,7 @@ useEffect(() => {
               <View key={index} style={styles.cartItemContainer}>
                   <View style={styles.productImageContainer}>
                   { item.file_name !== null ?(
-          <Image source={{ uri:`http://43.228.126.245/EMS-API2/storage/uploads/${item.file_name}`}} style={styles.productImage} />
+<Image source={{ uri:`${imageBase}${item.file_name}`}} style={styles.productImage} />
         ):(
           <Image source={require('../../../assets/images/2.png')} style={styles.productImage} />
         )}

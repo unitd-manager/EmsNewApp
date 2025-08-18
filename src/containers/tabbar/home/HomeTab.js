@@ -25,6 +25,7 @@ import SmallCardComponent from '../../../components/homeComponent/SmallCardCompo
 import EText from '../../../components/common/EText';
 import EHeader from '../../../components/common/EHeader';
 import api from '../../../api/api';
+import imageBase from '../../../api/imageBase';
 
 const HomeTab = () => {
   const colors = useSelector(state => state.theme.theme);
@@ -128,7 +129,7 @@ const HomeTab = () => {
                       marginLeft: 2,
                     }}
                     source={{
-                      uri: `http://43.228.126.245/EMS-API2/storage/uploads/${item.file_name}`,
+                      uri: `${imageBase}${item.file_name}`,
                     }}
                   />
                 </TouchableOpacity>

@@ -6,6 +6,7 @@ import HTMLView from 'react-native-htmlview';
 import { useNavigation } from '@react-navigation/native';
 import EHeader from '../../../components/common/EHeader';
 import api from '../../../api/api';
+import imageBase from '../../../api/imageBase';
 
 const ProductAddCart = ({ route }) => {
 
@@ -114,7 +115,7 @@ const ProductAddCart = ({ route }) => {
       </TouchableOpacity> */}
       <View style={styles.productImageContainer}>
       { image !== null ?(
-          <Image source={{ uri:`http://43.228.126.245/EMS-API2/storage/uploads/${image}`}} style={styles.productImage} />
+<Image source={{ uri:`${imageBase}${image}`}} style={styles.productImage} />
         ):(
           <Image source={require('../../../assets/images/2.png')} style={styles.productImage} />
         )}

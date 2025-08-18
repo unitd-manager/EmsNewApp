@@ -8,6 +8,8 @@ import {deviceWidth, moderateScale} from '../../common/constants';
 import React, {useState, useEffect} from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import api from '../../api/api';
+import imageBase from '../../api/imageBase';
+
 // import { ElevationLevels } from 'react-native-paper/lib/typescript/types';
 
 export default function SmallCardComponent({item, user, index, getMenus}) {
@@ -55,7 +57,8 @@ export default function SmallCardComponent({item, user, index, getMenus}) {
       }}>
       <Image
         source={{
-          uri: `https://ems.unitdtechnologies.com/storage/${item?.file_name}`,
+          
+           uri: `${imageBase}${item?.file_name}`,
         }}
         style={localStyles.imageStyle}></Image>
 

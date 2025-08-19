@@ -71,7 +71,7 @@ const HomeTab = () => {
 
   const getMenus = () => {
     api
-      .get('/section/getSectionMenu')
+      .get('/section/getAppSectionMenu')
       .then(res => setMenu(res.data.data))
       .catch(error => console.log('Menu Error', error));
   };
@@ -98,68 +98,68 @@ const HomeTab = () => {
 
   return (
     <View style={[styles.flexGrow1, {backgroundColor: '#fafafa'}]}>
-      <EHeader title="Egathuva Meignana Sabai (EMS)" />
-      <ScrollView>
-        <View>
-          <Text style={localStyles.UserText}>Welcome {userName}</Text>
-        </View>
+      <EHeader title="Egathuva Meignana Sabai (EMS)" style={{zIndex: 1, position: 'absolute', top: 0}} />
+      <FlashList
+        data={menu}
+        extraData={extraData}
+        renderItem={renderCategoryItem}
+        keyExtractor={(item, index) => index.toString()}
+        estimatedItemSize={10}
+        numColumns={2}
+        showsVerticalScrollIndicator={false}
+        contentContainerStyle={[localStyles.contentContainerStyle, {paddingTop: 80}]}
+        ListHeaderComponent={() => (
+          <>
+            <View>
+              <Text style={[localStyles.UserText, {marginTop: 0}]}>Welcome {userName}</Text>
+            </View>
 
-        {/* Banner Carousel using Swiper */}
-        <View style={{height: 200}}>
-          {datas.length > 0 && (
-            <Swiper
-              autoplay
-              autoplayTimeout={4}
-              showsPagination
-              dotColor="#ccc"
-              activeDotColor={colors.primary}
-              loop
-              onIndexChanged={i => setIndex(i)}>
-              {datas.map((item, i) => (
-                <TouchableOpacity
-                  key={i}
-                  activeOpacity={0.9}
-                  style={{width: SLIDER_WIDTH, height: 180}}>
-                  <Image
-                    style={{
-                      width: '99%',
+            {/* Banner Carousel using Swiper */}
+            <View style={{height: 190, marginTop: 0}}>
+              {datas.length > 0 && (
+                <Swiper
+                  autoplay
+                  autoplayTimeout={4}
+                  showsPagination
+                  dotColor="#ccc"
+                  activeDotColor={colors.primary}
+                  loop
+                  onIndexChanged={i => setIndex(i)}>
+                  {datas.map((item, i) => (
+                    <TouchableOpacity
+                      key={i}
+                      activeOpacity={0.9}
+                      style={{width: SLIDER_WIDTH, height: 80}}>
+                      <Image
+                        style={{
+                        width: '99%',
                       height: 120,
-                      marginTop: 25,
+                      marginTop: 5,
                       borderRadius: 8,
                       marginLeft: 2,
-                    }}
-                    source={{
-                      uri: `${imageBase}${item.file_name}`,
-                    }}
-                  />
-                </TouchableOpacity>
-              ))}
-            </Swiper>
-          )}
-        </View>
+                        }}
+                        source={{
+                          uri: `${imageBase}${item.file_name}`,
+                        }}
+                      />
+                    </TouchableOpacity>
+                  ))}
+                </Swiper>
+              )}
+            </View>
 
-        {/* Marquee */}
-        <View style={{marginBottom: 10}}>
-          <TouchableOpacity>
-            <Marquee
-              text={marqueeValue}
-              onPress={() => navigation.navigate(StackNav.Quiz)}
-            />
-          </TouchableOpacity>
-        </View>
-
-        {/* FlashList Grid */}
-        <FlashList
-          data={menu}
-          extraData={extraData}
-          renderItem={renderCategoryItem}
-          keyExtractor={(item, index) => index.toString()}
-          estimatedItemSize={10}
-          numColumns={2}
-          showsVerticalScrollIndicator={false}
-          contentContainerStyle={localStyles.contentContainerStyle}
-        />
-      </ScrollView>
+            {/* Marquee */}
+            <View style={{marginBottom: 20}}>
+              <TouchableOpacity>
+                <Marquee
+                  text={marqueeValue}
+                  onPress={() => navigation.navigate(StackNav.Quiz)}
+                />
+              </TouchableOpacity>
+            </View>
+          </>
+        )}
+      />
     </View>
   );
 };
@@ -176,8 +176,8 @@ const localStyles = StyleSheet.create({
   },
   UserText: {
     color: '#52316C',
-    marginLeft: 10,
-    marginTop: 7,
-    marginBottom: -4,
+    textAlign: 'center',
+    marginTop: 20,
+    marginBottom: 10,
   },
 });

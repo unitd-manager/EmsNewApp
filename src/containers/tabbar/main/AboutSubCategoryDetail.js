@@ -43,13 +43,14 @@ export default function AboutCategoryDetail({ detailviewSub, onDismissSub, selec
       onBackButtonPress={onDismissSub}>
       <View style={{ flex: 1, backgroundColor: '#fff', padding: 10 }}>
         <View style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexDirection: 'row' }}>
+           <MI size={25} color={'#222'} name="clear"
+            onPress={() => setDetailViewSub(!detailviewSub)}
+          ></MI>
           <Text style={{ fontWeight: '700', color: 'black' }}>{selectedItemSub && selectedItemSub[0]?.title}</Text>
           {selectedItemSub?.video_link && (
             <Text onPress={() => Linking.openURL(selectedItemSub.video_link)}>Watch Video</Text>
           )}
-          <MI size={25} color={'#222'} name="clear"
-            onPress={() => setDetailViewSub(!detailviewSub)}
-          ></MI>
+        
         </View>
 
         <ScrollView>

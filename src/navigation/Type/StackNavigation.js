@@ -78,6 +78,10 @@ export default function StackNavigation() {
           component={StackRoute.Collections}
         />
         <Stack.Screen
+          name={StackNav.Noorkal}
+          component={StackRoute.Noorkal}
+        />
+        <Stack.Screen
           name={StackNav.EmsDetailScreen}
           component={StackRoute.EmsDetailScreen}
         />

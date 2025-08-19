@@ -353,7 +353,7 @@ const filteredGallery = applyFilters();
           <Text style={styles.authorName}>{item.author_name}</Text>
         </View>
   
-        <Text style={styles.productPrice}>Rs : {item.price.toFixed(2)}</Text>
+        <Text style={styles.productPrice}>Rs : {item.price ? item.price.toFixed(2) : 'N/A'}</Text>
       </View>
     </View>
   )}

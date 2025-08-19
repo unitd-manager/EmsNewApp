@@ -15,7 +15,7 @@ import {
 } from 'react-native';
 import React, { useState, useEffect } from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { useNavigation } from '@react-navigation/native';
+import { useNavigation, useRoute } from '@react-navigation/native';
 import imageBase from '../../../api/imageBase';
 import api from '../../../api/api';
 import { StackNav } from '../../../navigation/NavigationKeys';

@@ -7,9 +7,10 @@ import {
   FlatList,
   ScrollView,
   TouchableOpacity,
+  Linking,
 } from 'react-native';
-import {StackNav} from '../../../navigation/NavigationKeys';
-import { useRoute,useNavigation } from '@react-navigation/native';
+import { useRoute, useNavigation } from '@react-navigation/native';
+import { StackNav } from '../../../navigation/NavigationKeys';
 import LinearGradient from 'react-native-linear-gradient';
 import EHeader from '../../../components/common/EHeader';
 import api from '../../../api/api';
@@ -65,17 +66,52 @@ const ListFlat = () => {
       });
   };
 
+  // const handleItemSub = (id) => {
+  //   api.post('/content/getSubContent', { sub_category_id: id })
+  //     .then((res) => {
+  //       setSelectedItemSub(res.data.data);
+  //       console.log('Category ID:', res.data.data);
+  //       const categoryId = res.data.data[0].external_link;
+  //       console.log('Category ID:', categoryId);
+        
+  //       // switch (res.data.data[0].external_link) {
+  //       //   case null:
+  //       //     console.log('Navigating to ProductList');
+  //       //     // navigation.navigate(StackNav.ProductList);
+  //       //     break;
+  //       //   case !null:
+  //       //     console.log('Navigating to Modal');
+  //       //     // setDetailViewSub(true);
+  //       //     break;
+  //       //   default:
+  //       //     console.log('No valid category ID found');
+  //       // }
+
+  //       if(res.data.data[0].external_link !== null){
+  //          setDetailViewSub(true);
+  //       }else{
+  //          console.log('category',categoryId)
+           
+  //       }
+
+        
+  //     })
+  //     .catch((error) => {
+  //       console.log('Error fetching client details by ID:', error);
+  //     });
+  // };
+
+
   const handleItemSub = (id) => {
     api.post('/content/getSubContent', { sub_category_id: id })
       .then((res) => {
         setSelectedItemSub(res.data.data);
-        const categoryId = res.data.data[0].category_title !== 'AAN-FNM'
+        const categoryId = res.data.data[0].external_link;
         if (categoryId === null) {
-          setDetailViewSub(true);
+          navigation.navigate(StackNav.ProductList);
         } else {
-          console.log('No valid category ID found');
+          setDetailViewSub(true);
         }
-        // setDetailViewSub(true);
       })
       .catch((error) => {
         console.log('Error fetching client details by ID:', error);
@@ -107,17 +143,21 @@ const ListFlat = () => {
             </View>
             <ScrollView>
               {selectedItems.map(subItem => {
+                
                 if (subItem.category_id === item.category_id) {
                  
                   return (
                     
-                    <TouchableOpacity key={subItem.sub_category_id} 
-                                      style={styles.subItem} 
-                                      onPress={() => {handleItemSub(subItem.sub_category_id);
-                                        if (subItem.category_title === 'AAN-FNM') {
-                                          navigation.navigate(StackNav.PlayAudioGallery,{SubId:subItem.sub_category_id});
-                                        } 
-                                      console.log('SubId',subItem)}}>
+                    <TouchableOpacity 
+                      key={subItem.sub_category_id} 
+                      style={styles.subItem} 
+                      onPress={() => {
+                        handleItemSub(subItem.sub_category_id);
+                        if (subItem.external_link) {
+                          Linking.openURL(subItem.external_link);
+                        }
+                      }}
+                    >
                       
                       <AD style={styles.subArrowIcon} name="rightcircle" size={18} color="#532c6d" />
                       <Text style={styles.subCategoryTitle}>{subItem.sub_category_title}</Text>

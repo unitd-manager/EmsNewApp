@@ -110,9 +110,9 @@ const ProductAddCart = ({ route }) => {
     <EHeader title={route.params ? route.name : route.name} />
     <ScrollView>
     <View style={styles.modalContent}>
-      {/* <TouchableOpacity style={styles.closeButton} onPress={() => onDismiss(!isVisible)}>
+      <TouchableOpacity style={styles.closeButton} onPress={() => navigation.goBack()}>
         <Text style={styles.closeButtonText}>X</Text>
-      </TouchableOpacity> */}
+      </TouchableOpacity>
       <View style={styles.productImageContainer}>
       { image !== null ?(
 <Image source={{ uri:`${imageBase}${image}`}} style={styles.productImage} />
@@ -199,12 +199,12 @@ const styles = StyleSheet.create({
     marginBottom: 16,
   },
   closeButton: {
-    position: 'absolute',
-    top: 10,
-    right: 10,
+    alignSelf: 'flex-end',
     padding: 8,
     borderRadius: 8,
     backgroundColor: 'rgba(0, 0, 0, 0.5)',
+    marginRight: 10,
+    marginTop: 10,
   },
   closeButtonText: {
     color: 'white',

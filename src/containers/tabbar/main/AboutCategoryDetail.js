@@ -55,10 +55,11 @@ export default function AboutCategoryDetail({ detailview, onDismiss, singleDetai
       onBackButtonPress={onDismiss}>
       <View style={{ flex: 1, backgroundColor: '#fff', padding: 10 }}>
         <View style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexDirection: 'row' }}>
-          <Text style={{ fontWeight: '700', color: 'black' }}>{singleDetail && singleDetail[0]?.title}</Text>
-          <MI size={25} color={'#222'} name="clear"
+           <MI size={25} color={'#222'} name="clear"
             onPress={() => setDetailView(!detailview)}
           ></MI>
+          <Text style={{ fontWeight: '700', color: 'black' }}>{singleDetail && singleDetail[0]?.title}</Text>
+        
         </View>
 
         <ScrollView>

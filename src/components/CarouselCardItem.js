@@ -35,9 +35,8 @@ const styles = StyleSheet.create({
     elevation: 7,
   },
   image: {
-    width: ITEM_WIDTH,
-    height: 200,
-    resizeMode:'cover'
+    width: '100%',
+    height: '100%',
   },
   header: {
     color: "#222",

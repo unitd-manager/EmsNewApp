@@ -1,5 +1,6 @@
 import {Image, StyleSheet, TouchableOpacity} from 'react-native';
 import {useNavigation} from '@react-navigation/native';
+import { StackNav } from '../../navigation/NavigationKeys';
 
 // Custom Imports
 import EText from '../common/EText';
@@ -53,7 +54,7 @@ export default function SmallCardComponent({item, user, index, getMenus}) {
         {backgroundColor: '#532c6d' ? '#532c6d' : '#532c6d'},
       ]}
       onPress={() => {
-        navigation.navigate(item.routes, {item, user});
+        navigation.navigate(item.routes === StackNav.Magazine ? StackNav.Magazine : item.routes === StackNav.Noorkal ? StackNav.Noorkal : item.routes, {item, user});
       }}>
       <Image
         source={{

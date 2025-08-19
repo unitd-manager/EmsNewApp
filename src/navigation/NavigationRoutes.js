@@ -14,6 +14,7 @@ import Education from '../containers/tabbar/main/Education';
 import Manitha from '../containers/tabbar/main/Manitha';
 import Collections from '../containers/tabbar/main/Collections';
 import EmsDetailScreen from '../containers/tabbar/main/EmsDetailScreen';
+import Noorkal from '../containers/tabbar/main/Noorkal';
 import Quiz from '../containers/tabbar/main/Quiz';
 import PhotoGallery from '../containers/tabbar/main/PhotoGallery';
 import VideoGallery from '../containers/tabbar/main/VideoGallery';
@@ -51,6 +52,7 @@ export const StackRoute = {
   Education,
   Manitha,
   Collections,
+  Noorkal,
   EmsDetailScreen,
   Quiz,
   PhotoGallery,

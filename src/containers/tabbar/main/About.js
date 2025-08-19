@@ -9,7 +9,8 @@ import {
   TouchableOpacity,
   Linking,
 } from 'react-native';
-import { useRoute } from '@react-navigation/native';
+import { useRoute, useNavigation } from '@react-navigation/native';
+import { StackNav } from '../../../navigation/NavigationKeys';
 import LinearGradient from 'react-native-linear-gradient';
 import EHeader from '../../../components/common/EHeader';
 import api from '../../../api/api';
@@ -19,6 +20,7 @@ import AboutSubCategoryDetail from './AboutSubCategoryDetail';
 
 const ListFlat = () => {
   const route = useRoute();
+  const navigation = useNavigation();
   const [manitha, setManitha] = useState([]);
   const [selectedItem, setSelectedItem] = useState(null);
   const [detailview, setDetailView] = useState(false);
@@ -106,9 +108,9 @@ const ListFlat = () => {
         setSelectedItemSub(res.data.data);
         const categoryId = res.data.data[0].external_link;
         if (categoryId === null) {
-          setDetailViewSub(true);
+          navigation.navigate(StackNav.ProductList);
         } else {
-          console.log('No valid category ID found');
+          setDetailViewSub(true);
         }
       })
       .catch((error) => {
@@ -141,6 +143,7 @@ const ListFlat = () => {
             </View>
             <ScrollView>
               {selectedItems.map(subItem => {
+                
                 if (subItem.category_id === item.category_id) {
                  
                   return (

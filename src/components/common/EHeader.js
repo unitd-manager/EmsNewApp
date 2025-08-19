@@ -17,7 +17,8 @@ const EHeader = props => {
   const goBack = () => navigation.goBack();
   return (
     <View style={[localStyles.container, !!isHideBack && styles.pr10]}>
-      <View style={[styles.rowStart, styles.flex]}>
+     
+        
         {!isHideBack && (
           <TouchableOpacity style={styles.pr10} onPress={onPressBack || goBack}>
             <Feather
@@ -35,7 +36,7 @@ const EHeader = props => {
           type={'B16'}>
           {title}
         </EText>
-      </View>
+     
       {!!rightIcon && rightIcon}
     </View>
   );
@@ -45,10 +46,16 @@ export default memo(EHeader);
 
 const localStyles = StyleSheet.create({
   container: {
-    ...styles.rowSpaceBetween,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'flex-start',
     ...styles.ph20,
     ...styles.pv15,
-    ...styles.center,
-    backgroundColor:'#532c6d'
+    backgroundColor:'#532c6d',
+    paddingTop:'40',
+    bottom: 0,
+    width: '100%',
+    zIndex: 1,
+    top: undefined
   },
 });

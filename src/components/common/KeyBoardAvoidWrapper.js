@@ -11,16 +11,26 @@ export default KeyBoardAvoidWrapper = ({
   children,
   containerStyle,
   contentContainerStyle,
+  // allow override if a screen wants a custom offset
+  keyboardVerticalOffset,
 }) => {
+  // Provide a numeric offset for both platforms. If caller passed a number, use it.
+  const offset = typeof keyboardVerticalOffset === 'number' ? keyboardVerticalOffset : moderateScale(50);
+
+  // Use 'padding' on both platforms — it's generally more reliable across nested views and backgrounds.
+  const behavior = 'padding';
+
   return (
     <KeyboardAvoidingView
-      keyboardVerticalOffset={isIOS ? moderateScale(50) : null}
+      keyboardVerticalOffset={offset}
       style={[styles.flex, containerStyle]}
-      behavior={isIOS ? 'padding' : null}>
+      behavior={behavior}
+      enabled>
       <ScrollView
+        keyboardShouldPersistTaps={'handled'}
         nestedScrollEnabled={true}
         showsVerticalScrollIndicator={false}
-        contentContainerStyle={contentContainerStyle}
+        contentContainerStyle={[{flexGrow: 1}, contentContainerStyle]}
         bounces={false}>
         {children}
       </ScrollView>

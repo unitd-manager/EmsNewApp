@@ -5,33 +5,31 @@ import {
   Image,
   TouchableOpacity,
   Text,
-  ScrollView,
+  Dimensions,
 } from 'react-native';
-import React, {useState, useEffect, useRef} from 'react';
+import React, {useState, useEffect} from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import Marquee from './Marquee';
 import {useSelector} from 'react-redux';
 import {FlashList} from '@shopify/flash-list';
 import {StackNav} from '../../../navigation/NavigationKeys';
 import {useNavigation} from '@react-navigation/native';
-import Swiper from 'react-native-swiper';
+import {SwiperFlatList} from 'react-native-swiper-flatlist';
 
 // Custom Imports
 import {styles} from '../../../themes';
-import CarouselCardItem, {
-  SLIDER_WIDTH,
-} from '../../../components/CarouselCardItem';
 import SmallCardComponent from '../../../components/homeComponent/SmallCardComponent';
-import EText from '../../../components/common/EText';
 import EHeader from '../../../components/common/EHeader';
 import api from '../../../api/api';
 import imageBase from '../../../api/imageBase';
+const { width: windowWidth } = Dimensions.get('window');
+
+// ...inside your component's render/ListHeaderComponent:
 
 const HomeTab = () => {
   const colors = useSelector(state => state.theme.theme);
   const navigation = useNavigation();
   const [extraData, setExtraData] = useState(true);
-  const [index, setIndex] = useState(0);
   const [menu, setMenu] = useState([]);
   const [datas, setBanner] = useState([]);
   const [marquee, setMarquee] = useState([]);
@@ -55,7 +53,6 @@ const HomeTab = () => {
         console.error('Error fetching user:', error);
       }
     };
-
     getUserCart();
   }, []);
 
@@ -98,7 +95,11 @@ const HomeTab = () => {
 
   return (
     <View style={[styles.flexGrow1, {backgroundColor: '#fafafa'}]}>
-      <EHeader title="Egathuva Meignana Sabai (EMS)" style={{zIndex: 1, position: 'absolute', top: 0}} />
+      <EHeader
+        title="Egathuva Meignana Sabai (EMS)"
+        style={{zIndex: 1, position: 'absolute', top: 0}}
+      />
+
       <FlashList
         data={menu}
         extraData={extraData}
@@ -107,46 +108,75 @@ const HomeTab = () => {
         estimatedItemSize={10}
         numColumns={2}
         showsVerticalScrollIndicator={false}
-        contentContainerStyle={[localStyles.contentContainerStyle, {paddingTop: 80}]}
+        contentContainerStyle={[
+          localStyles.contentContainerStyle,
+          {paddingTop: 80},
+        ]}
         ListHeaderComponent={() => (
           <>
             <View>
-              <Text style={[localStyles.UserText, {marginTop: 0}]}>Welcome {userName}</Text>
+              <Text style={[localStyles.UserText, {marginTop: 0}]}>
+                Welcome {userName}
+              </Text>
             </View>
 
-            {/* Banner Carousel using Swiper */}
-            <View style={{height: 190, marginTop: 0}}>
-              {datas.length > 0 && (
-                <Swiper
-                  autoplay
-                  autoplayTimeout={4}
-                  showsPagination
-                  dotColor="#ccc"
-                  activeDotColor={colors.primary}
-                  loop
-                  onIndexChanged={i => setIndex(i)}>
-                  {datas.map((item, i) => (
-                    <TouchableOpacity
-                      key={i}
-                      activeOpacity={0.9}
-                      style={{width: SLIDER_WIDTH, height: 80}}>
-                      <Image
-                        style={{
-                        width: '99%',
-                      height: 120,
-                      marginTop: 5,
-                      borderRadius: 8,
-                      marginLeft: 2,
-                        }}
-                        source={{
-                          uri: `${imageBase}${item.file_name}`,
-                        }}
-                      />
-                    </TouchableOpacity>
-                  ))}
-                </Swiper>
-              )}
-            </View>
+            {/* Banner Carousel using SwiperFlatList */}
+          {/* Banner Carousel */}
+
+<View >
+  {datas.length > 0 ? (
+    <SwiperFlatList
+      autoplay
+      autoplayDelay={3}
+      autoplayLoop
+      showPagination
+      paginationStyleItem={{ width: 8, height: 8 }}
+      paginationActiveColor={colors.primary}
+      paginationDefaultColor="#ccc"
+      // optional: disable momentum to make slide snapping predictable
+      disableGesture={false}
+    >
+      {datas.map((item, i) => {
+        const imgUri = item.file_name.startsWith('http')
+          ? item.file_name
+          : `${imageBase}${item.file_name}`;
+
+        return (
+          // crucial: make each slide the full width of the swiper
+          <View
+            key={i}
+            style={{
+              width: windowWidth,          // <- important
+              height: 200,                 // match parent height
+              justifyContent: 'center',
+              alignItems: 'center',
+            }}
+          >
+            <TouchableOpacity activeOpacity={0.9} style={{ width: '100%', alignItems: 'center' }}>
+              <Image
+                source={{ uri: imgUri }}
+                style={{
+                  width: windowWidth * 0.92, // slightly inset for rounded corners
+                  height: 110,
+                  borderRadius: 8,
+                  alignSelf: 'center',
+                }}
+              />
+            </TouchableOpacity>
+
+            {/* optional debug/info text — remove in production */}
+            <Text style={{ textAlign: 'center', fontSize: 10, color: '#fff'}}>
+              {imgUri}
+            </Text>
+          </View>
+        );
+      })}
+    </SwiperFlatList>
+  ) : (
+    <Text style={{ textAlign: 'center', marginTop: 20 }}>No banners found</Text>
+  )}
+</View>
+
 
             {/* Marquee */}
             <View style={{marginBottom: 20}}>
@@ -171,13 +201,12 @@ const localStyles = StyleSheet.create({
     ...styles.ph10,
     ...styles.pb20,
   },
-  fancyText: {
-    alignSelf: 'center',
-  },
   UserText: {
     color: '#52316C',
     textAlign: 'center',
     marginTop: 20,
     marginBottom: 10,
+    fontSize: 16,
+    fontWeight: '500',
   },
 });

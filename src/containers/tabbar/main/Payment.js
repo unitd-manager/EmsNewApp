@@ -11,6 +11,8 @@ import {
   ScrollView,
   ActivityIndicator,
   Button,
+  KeyboardAvoidingView,
+  Platform,
 } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {StackNav} from '../../../navigation/NavigationKeys';
@@ -508,13 +510,16 @@ const PhotoGallery = () => {
   }, [categoryFilter]);
 
   return (
-    <>
+    <KeyboardAvoidingView 
+      style={styles.container} 
+      behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+      keyboardVerticalOffset={Platform.OS === 'ios' ? 64 : 0}>
       {/* <EHeader title="Payment" /> */}
       <View style={styles.buttonContainer1}>
         <View style={styles.pickerContainer5}>
           <Text style={styles.cartItemQuantity7}>Payment</Text>
         </View>
-       </View>
+      </View>
       {loading && (
         <View style={styles.loadingContainer}>
           <ActivityIndicator size="large" color="#163a71" />
@@ -568,7 +573,12 @@ const PhotoGallery = () => {
         )}
       </View>
 
-      <ScrollView>
+  <ScrollView 
+    style={{flex: 1}} 
+    contentContainerStyle={{paddingBottom: 120}} 
+    showsVerticalScrollIndicator={true}
+    keyboardShouldPersistTaps="handled"
+  >
         {userContactId ? (
           <>
             <Text style={styles.cartItemQuantity}>Name</Text>
@@ -860,9 +870,9 @@ const PhotoGallery = () => {
         />
          </>
         )}
-      </ScrollView>
+  </ScrollView>
       <View style={styles.buttonContainer}>
-      <TouchableOpacity
+        <TouchableOpacity
           onPress={() => BackToList()}
           style={[styles.flipButton1, styles.backButton1]}>
           <Text style={styles.flipButtonText}>Go Back</Text>
@@ -873,9 +883,8 @@ const PhotoGallery = () => {
           style={[styles.flipButton1, styles.backButton1]}>
           <Text style={styles.flipButtonText}> Confirm Payment</Text>
         </TouchableOpacity>
-
       </View>
-    </>
+    </KeyboardAvoidingView>
   );
 };
 
@@ -886,6 +895,11 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
+  },
+  container: {
+    flex: 1,
+    backgroundColor: '#fff',
+    justifyContent: 'space-between',
   },
   pickerContainer5: {
     // borderColor: 'gray',

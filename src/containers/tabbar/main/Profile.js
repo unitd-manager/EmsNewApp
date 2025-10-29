@@ -11,6 +11,8 @@ import {
   ScrollView,
   ActivityIndicator,
   Button,
+  KeyboardAvoidingView,
+  Platform,
 } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {StackNav} from '../../../navigation/NavigationKeys';
@@ -340,7 +342,10 @@ const PhotoGallery = () => {
   }, [categoryFilter]);
 
   return (
-    <>
+      <KeyboardAvoidingView
+        style={{flex: 1}}
+        behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+        keyboardVerticalOffset={Platform.OS === 'ios' ? 64 : 0}>
       <EHeader title=" Profile" />
      
       {loading && (
@@ -349,7 +354,11 @@ const PhotoGallery = () => {
         </View>
       )}
 
-      <ScrollView>
+        <ScrollView
+          style={{flex: 1}}
+          contentContainerStyle={{paddingBottom: 120}}
+          showsVerticalScrollIndicator={true}
+          keyboardShouldPersistTaps="handled">
         {userContactId ? (
           <>
             <Text style={styles.cartItemQuantity}>Name</Text>
@@ -632,7 +641,7 @@ const PhotoGallery = () => {
           </TouchableOpacity>
         </View>
       </View>
-    </>
+      </KeyboardAvoidingView>
   );
 };
 

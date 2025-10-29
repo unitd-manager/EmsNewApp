@@ -254,14 +254,18 @@ export default function SignUp() {
   return (
     <ESafeAreaView style={localStyles.root}>
       {/* <EHeader isHideBack/> */}
-      <KeyBoardAvoidWrapper contentContainerStyle={{flex: 1}}>
-        <ImageBackground
-          source={require('../../assets/images/1quiz.png')}
-          style={localStyles.backgroundImage}>
+      
+      <KeyBoardAvoidWrapper contentContainerStyle={{flex: 1}} behavior="padding" keyboardVerticalOffset={0}>
+     
+        <View style={localStyles.backgroundWrapper}>
+      
           <View style={localStyles.mainContainer}>
-            <View style={[{flex: 1}]}></View>
+             <Image
+            source={require('../../assets/images/logo.jpg')}
+            style={localStyles.topImage}
+          />
 
-            <View style={[localStyles.loginBg, {flex: 3}]}>
+            <View style={[localStyles.loginBg, {flex: 1}]}>
               <EInput
                 placeHolder="Name"
                 placeholderTextColor={colors.primary5}
@@ -471,7 +475,7 @@ export default function SignUp() {
               </TouchableOpacity>
             </View>
           </View>
-        </ImageBackground>
+        </View>
       </KeyBoardAvoidWrapper>
     </ESafeAreaView>
   );
@@ -503,12 +507,23 @@ const localStyles = StyleSheet.create({
     resizeMode: 'cover',
     justifyContent: 'center',
   },
+  backgroundWrapper: {
+    flex: 1,
+    justifyContent: 'flex-start',
+  },
+  topImage: {
+    width: '30%',
+    height: getHeight(60),
+  resizeMode: 'contain',
+  alignSelf: 'center',
+    marginTop: 30,
+  },
   inputBoxStyle: {
     ...styles.ph15,
     color: '#222',
   },
   root: {
-    flex: 3,
+    flex: 1,
     justifyContent: 'center',
     flexDirection: 'column',
     alignContent: 'center',

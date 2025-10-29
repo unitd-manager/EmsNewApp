@@ -64,16 +64,6 @@ const ListFlat = () => {
       });
   };
 
-  // const handleItemSub = (id) => {
-  //   api.post('/content/getSubContent', { sub_category_id: id })
-  //     .then((res) => {
-  //       setSelectedItemSub(res.data.data);
-  //       setDetailViewSub(true);
-  //     })
-  //     .catch((error) => {
-  //       console.log('Error fetching client details by ID:', error);
-  //     });
-  // };
   const handleItemSub = (id) => {
     api.post('/content/getSubContent', { sub_category_id: id })
       .then((res) => {
@@ -113,15 +103,19 @@ const ListFlat = () => {
                 <Text style={styles.categoryTitle}>{item.category_title}</Text>
               </TouchableOpacity>
             </View>
-            <ScrollView>
+            <ScrollView
+              nestedScrollEnabled={true}
+              keyboardShouldPersistTaps="handled"
+              showsVerticalScrollIndicator={false}
+              contentContainerStyle={{ paddingBottom: 6 }}
+              style={styles.innerScroll}
+            >
               {selectedItems.map(subItem => {
                 if (subItem.category_id === item.category_id) {
-                 
                   return (
-                    
-                    <TouchableOpacity 
-                      key={subItem.sub_category_id} 
-                      style={styles.subItem} 
+                    <TouchableOpacity
+                      key={subItem.sub_category_id}
+                      style={styles.subItem}
                       onPress={() => {
                         handleItemSub(subItem.sub_category_id);
                         if (subItem.external_link) {
@@ -129,12 +123,12 @@ const ListFlat = () => {
                         }
                       }}
                     >
-                      
                       <AD style={styles.subArrowIcon} name="rightcircle" size={18} color="#532c6d" />
                       <Text style={styles.subCategoryTitle}>{subItem.sub_category_title}</Text>
                     </TouchableOpacity>
                   );
                 }
+                return null;
               })}
             </ScrollView>
           </LinearGradient>
@@ -153,6 +147,8 @@ const ListFlat = () => {
           data={manitha}
           renderItem={renderItem}
           keyExtractor={(item) => item.category_id.toString()}
+          style={{ flex: 1 }}
+          keyboardShouldPersistTaps="handled"
           contentContainerStyle={{ paddingBottom: 120 }}
         />
       </SafeAreaView>
@@ -181,10 +177,17 @@ const styles = StyleSheet.create({
   },
   item: {
     borderRadius: 8,
-    padding: 20,
-    height:270,
+    paddingVertical: 20,
+    paddingHorizontal: 20,
     flexDirection: 'column',
     alignItems: 'flex-start',
+    // allow inner scroll area to be constrained so nestedScrollEnabled can work
+    overflow: 'hidden',
+  },
+
+  innerScroll: {
+    maxHeight: 200,
+    width: '100%',
   },
   header: {
     flexDirection: 'row',
